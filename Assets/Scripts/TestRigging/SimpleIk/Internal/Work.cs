@@ -4,9 +4,9 @@ namespace TestRigging.SimpleIk.Internal
     class Work
     {
 
-        internal static Work Idle { get; } = new Work(3f, State.Idle);
+        internal static Work Idle { get; } = new Work(0.5f, State.Idle);
 
-        internal static Work SetTarget { get; } = new Work(1f, State.SetTarget);
+        internal static Work SetTarget { get; } = new Work(0.5f, State.SetTarget);
 
         internal static Work Run { get; } = new Work(3f, State.Run);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TestRigging.SimpleIk.Internal;
@@ -17,6 +18,12 @@ namespace TestRigging.SimpleIk
 
         Vector3 LastTargetPosition;
 
+        IkWorker _worker;
+
+        Stepper _stepper { get; } = new Stepper(0.1f);
+
+        List<Bone> _workingBones;
+
         Cycle<Work> _works { get; } = new Cycle<Work>(
             new[]
             {
@@ -30,6 +37,13 @@ namespace TestRigging.SimpleIk
         {
             Assert.IsNotNull(Bones, "Bones != null");
             Assert.IsTrue(Bones.Any(), "Bones.Any()");
+            Assert.IsNotNull(Target, "Target != null");
+
+            _workingBones = Bones
+                .Where(bone => bone != null)
+                .ToList();
+
+            Assert.IsTrue(_workingBones.Any(), "_workingBones.Any()");
         }
 
         void Start()
@@ -39,20 +53,70 @@ namespace TestRigging.SimpleIk
 
         void Update()
         {
+            UpdateState();
+
+            switch (_works.Value.State)
+            {
+                case State.Idle:
+                    // do nothing
+                    break;
+
+                case State.SetTarget:
+                    LastTargetPosition = Target.position;
+
+                    break;
+
+                case State.Run:
+                    WorkIk();
+
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        void UpdateState()
+        {
             var current = _works.Value;
             var didFinish = current.DidFinish(Time.time);
 
-            if (didFinish)
+            if (!didFinish)
             {
-                current.Clear();
-                var next = _works.GoNext();
-                next.Start(Time.time);
-
-                Debug.Log(
-                    $"{Time.time}: {current.State} -> {next.State}",
-                    gameObject
-                );
+                return;
             }
+
+            current.Clear();
+            var next = _works.GoNext();
+            next.Start(Time.time);
+
+            Debug.Log(
+                $"{Time.time}: {current.State} -> {next.State}",
+                gameObject
+            );
+
+            if (next.State == State.Run)
+            {
+                _stepper.Clear();
+                _stepper.Start(Time.time);
+
+                _worker = new IkWorker(_workingBones, LastTargetPosition);
+            }
+        }
+
+        void WorkIk()
+        {
+            var isEnough = _stepper.IsEnough(Time.time);
+
+            if (!isEnough)
+            {
+                return;
+            }
+
+            _stepper.Start(Time.time);
+
+            _worker.Step();
+
         }
 
     }

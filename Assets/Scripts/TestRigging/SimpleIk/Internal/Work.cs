@@ -1,40 +1,45 @@
-namespace TestRigging.SimpleIk.Internal
+namespace TestRigging.SimpleIk
 {
 
-    class Work
+    public partial class SimpleIk
     {
 
-        internal static Work Idle { get; } = new Work(0.5f, State.Idle);
-
-        internal static Work SetTarget { get; } = new Work(0.5f, State.SetTarget);
-
-        internal static Work Run { get; } = new Work(3f, State.Run);
-
-        internal State State { get; }
-
-        float _duration { get; }
-
-        float _startedAt;
-
-        Work(float duration, State state)
+        class Work
         {
-            _duration = duration;
-            State = state;
-        }
 
-        public void Clear()
-        {
-            _startedAt = 0f;
-        }
+            internal static Work Idle { get; } = new Work(0.5f, State.Idle);
 
-        public void Start(float time)
-        {
-            _startedAt = time;
-        }
+            internal static Work SetTarget { get; } = new Work(0.5f, State.SetTarget);
 
-        public bool DidFinish(float time)
-        {
-            return time > _startedAt + _duration;
+            internal static Work Run { get; } = new Work(3f, State.Run);
+
+            internal State State { get; }
+
+            float _duration { get; }
+
+            float _startedAt;
+
+            Work(float duration, State state)
+            {
+                _duration = duration;
+                State = state;
+            }
+
+            public void Clear()
+            {
+                _startedAt = 0f;
+            }
+
+            public void Start(float time)
+            {
+                _startedAt = time;
+            }
+
+            public bool DidFinish(float time)
+            {
+                return time > _startedAt + _duration;
+            }
+
         }
 
     }

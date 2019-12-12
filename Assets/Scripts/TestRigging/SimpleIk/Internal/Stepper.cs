@@ -1,32 +1,37 @@
-namespace TestRigging.SimpleIk.Internal
+namespace TestRigging.SimpleIk
 {
 
-    class Stepper
+    public partial class SimpleIk
     {
 
-        float _singleStepDuration { get; }
-
-        float? _startedAt;
-
-        internal Stepper(float singleStepDuration)
+        class Stepper
         {
-            _singleStepDuration = singleStepDuration;
-        }
 
-        internal void Clear()
-        {
-            _startedAt = null;
-        }
+            float _singleStepDuration { get; }
 
-        internal bool IsEnough(float time)
-        {
-            return _startedAt.HasValue
-                   && time > _startedAt.Value + _singleStepDuration;
-        }
+            float? _startedAt;
 
-        internal void Start(float time)
-        {
-            _startedAt = time;
+            internal Stepper(float singleStepDuration)
+            {
+                _singleStepDuration = singleStepDuration;
+            }
+
+            internal void Clear()
+            {
+                _startedAt = null;
+            }
+
+            internal bool IsEnough(float time)
+            {
+                return _startedAt.HasValue
+                       && time > _startedAt.Value + _singleStepDuration;
+            }
+
+            internal void Start(float time)
+            {
+                _startedAt = time;
+            }
+
         }
 
     }

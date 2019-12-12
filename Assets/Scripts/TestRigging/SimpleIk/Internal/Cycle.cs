@@ -1,49 +1,54 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TestRigging.SimpleIk.Internal
+namespace TestRigging.SimpleIk
 {
 
-    class Cycle<T>
-        where T : class
+    public partial class SimpleIk
     {
 
-        int _currentIndex;
-
-        List<T> _nodes { get; }
-
-        internal T Value =>
-            !_nodes.Any()
-                ? null
-                : _nodes[_currentIndex];
-
-        internal T Next =>
-            !_nodes.Any()
-                ? null
-                : _nodes[GetNextIndex()];
-
-        internal Cycle(IEnumerable<T> nodes)
+        class Cycle<T>
+            where T : class
         {
-            _nodes = new List<T>(nodes);
-        }
 
-        internal T GoNext()
-        {
-            _currentIndex = GetNextIndex();
+            int _currentIndex;
 
-            return Value;
-        }
+            List<T> _nodes { get; }
 
-        int GetNextIndex()
-        {
-            var candidate = _currentIndex + 1;
+            internal T Value =>
+                !_nodes.Any()
+                    ? null
+                    : _nodes[_currentIndex];
 
-            if (candidate < _nodes.Count)
+            internal T Next =>
+                !_nodes.Any()
+                    ? null
+                    : _nodes[GetNextIndex()];
+
+            internal Cycle(IEnumerable<T> nodes)
             {
-                return candidate;
+                _nodes = new List<T>(nodes);
             }
 
-            return 0;
+            internal T GoNext()
+            {
+                _currentIndex = GetNextIndex();
+
+                return Value;
+            }
+
+            int GetNextIndex()
+            {
+                var candidate = _currentIndex + 1;
+
+                if (candidate < _nodes.Count)
+                {
+                    return candidate;
+                }
+
+                return 0;
+            }
+
         }
 
     }

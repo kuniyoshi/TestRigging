@@ -1,14 +1,19 @@
-namespace TestRigging.SimpleIk.Internal
+namespace TestRigging.SimpleIk
 {
 
-    enum State
+    public partial class SimpleIk
     {
 
-        Idle,
+        enum State
+        {
 
-        SetTarget,
+            Idle,
 
-        Run,
+            SetTarget,
+
+            Run,
+
+        }
 
     }
 

@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestRigging.SimpleIk.Internal;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace TestRigging.SimpleIk
 {
 
-    public class SimpleIk
+    public partial class SimpleIk
         : MonoBehaviour
     {
 
-        public List<Bone> Bones;
+        [SerializeField]
+        List<Bone> Bones;
 
-        public Transform Target;
+        [SerializeField]
+        Transform Target;
 
-        Vector3 LastTargetPosition;
+        Vector3 _lastTargetPosition;
 
         IkWorker _worker;
 
@@ -62,7 +63,7 @@ namespace TestRigging.SimpleIk
                     break;
 
                 case State.SetTarget:
-                    LastTargetPosition = Target.position;
+                    _lastTargetPosition = Target.position;
 
                     break;
 
@@ -100,7 +101,7 @@ namespace TestRigging.SimpleIk
                 _stepper.Clear();
                 _stepper.Start(Time.time);
 
-                _worker = new IkWorker(_workingBones, LastTargetPosition);
+                _worker = new IkWorker(_workingBones, _lastTargetPosition);
             }
         }
 

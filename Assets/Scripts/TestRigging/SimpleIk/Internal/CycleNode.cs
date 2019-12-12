@@ -1,17 +1,22 @@
-namespace TestRigging.SimpleIk.Internal
+namespace TestRigging.SimpleIk
 {
 
-    class CycleNode<T>
+    public partial class SimpleIk
     {
 
-        internal T Next { get; }
-
-        internal T Value { get; }
-
-        internal CycleNode(T value, T next)
+        class CycleNode<T>
         {
-            Value = value;
-            Next = next;
+
+            internal T Next { get; }
+
+            internal T Value { get; }
+
+            internal CycleNode(T value, T next)
+            {
+                Value = value;
+                Next = next;
+            }
+
         }
 
     }
